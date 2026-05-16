@@ -45,7 +45,6 @@ public class Bird {
             velY = VELOCIDAD_MAX_CAIDA;
         y += velY * dt;
 
-        // tiempoAla += dt;
         // tiempoAla solo avanza durante el salto
         if (timerAnimAla > 0) {
             timerAnimAla -= dt;
@@ -67,7 +66,6 @@ public class Bird {
 
     public void dibujar(DibujoHelper d, float r, float g, float b) {
         
-        // float inclinacion = velY * 0.03f;
 
         d.rect(X, y, ANCHO, ALTO, r, g, b);
 
@@ -76,8 +74,23 @@ public class Bird {
         d.rect(X + 0.036f, y + 0.020f, 0.012f, 0.012f, 0.0f, 0.0f, 0.0f); // pupila
 
         // --- PICO (triángulo apuntando a la derecha) ---
-        d.triangulo(X + 0.065f, y, 0.04f, 0.025f, 0.95f, 0.55f, 0.10f);
+        d.triangulo(
+            X + 0.065f, y, 
+            0.04f, 0.025f, 
+            0.95f, 
+            0.55f, 
+            0.10f
+        );
 
+        // pata
+        // d.trianguloPata(
+        //     X - 0.015f, y-0.055f, 
+        //     0.04f, 0.030f, 
+        //     // rgb
+        //     0.95f, 
+        //     0.55f, 
+        //     0.10f
+        // );
         // Ala: solo oscila si timerAnimAla > 0; en reposo sin(0)=0 → offset=0
         float alaOffsetY = (float) Math.sin(tiempoAla * 8.0f) * 0.012f;  
         d.rect(X - 0.010f, y - 0.010f + alaOffsetY, 0.055f, 0.020f, r * 0.85f, g * 0.85f, b * 0.85f);

@@ -20,6 +20,7 @@ public class DibujoHelper {
 
     // VAO/VBO para triángulos
     private final int vaoTri;
+    private final int vaoPico;
     // private final int vboTri;
 
     public DibujoHelper(int programa, int uOffset, int uScale, int uColor) {
@@ -49,6 +50,15 @@ public class DibujoHelper {
             -0.5f, -0.5f, 0.0f
         };
 
+        //pata
+        float[] tripico = {
+            -0.5f,  -0.5f, 0.0f,  
+            0.5f,  -0.5f, 0.0f,   
+            0.0f, 0.5f, 0.0f
+        };
+
+        vaoPico = crearVAO(tripico);
+
         vaoTri = crearVAO(tri);
     }
 
@@ -64,6 +74,15 @@ public class DibujoHelper {
     /** Dibuja un triángulo (apunta a la derecha) centrado en (x,y). */
     public void triangulo(float x, float y, float ancho, float alto, float r, float g, float b) {
         GL30.glBindVertexArray(vaoTri);
+        GL20.glUniform2f(uOffset, x, y);
+        GL20.glUniform2f(uScale,  ancho, alto);
+        GL20.glUniform3f(uColor,  r, g, b);
+        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, 3);  // solo 3 vértices
+    }
+
+    /** Dibuja un triángulo (la pata) centrado en (x,y). */
+    public void trianguloPata(float x, float y, float ancho, float alto, float r, float g, float b) {
+        GL30.glBindVertexArray(vaoPico);
         GL20.glUniform2f(uOffset, x, y);
         GL20.glUniform2f(uScale,  ancho, alto);
         GL20.glUniform3f(uColor,  r, g, b);

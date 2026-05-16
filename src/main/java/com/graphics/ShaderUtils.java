@@ -56,14 +56,6 @@ public class ShaderUtils {
             throw new RuntimeException("Error al enlazar programa: " + GL20.glGetProgramInfoLog(programa));
         }
     
-        // Resolver uniforms.
-        // uOffsetLocation = GL20.glGetUniformLocation(programa, "uOffset");
-        // uScaleLocation = GL20.glGetUniformLocation(programa, "uScale");
-        // uColorLocation = GL20.glGetUniformLocation(programa, "uColor");
-        // if (uOffsetLocation == -1 || uScaleLocation == -1 || uColorLocation == -1) {
-        //     throw new RuntimeException("No se pudieron obtener uniforms del shader");
-        // }
-    
         // Limpiar objetos shader temporales.
         GL20.glDeleteShader(vertexShader);
         GL20.glDeleteShader(fragmentShader);
@@ -80,8 +72,3 @@ public class ShaderUtils {
     }
 }
 
-
-
-// public class ShaderUtils {
-    
-// }
