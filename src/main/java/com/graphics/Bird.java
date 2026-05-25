@@ -8,7 +8,7 @@ public class Bird {
     public static final float ANCHO = 0.10f;
     public static final float ALTO = 0.10f;
 
-    public static final float GRAVEDAD = -1.9f;
+    public  float GRAVEDAD = -1.9f;
     public static final float IMPULSO_SALTO = 0.85f;
     public static final float VELOCIDAD_MAX_CAIDA = -1.8f;
 
@@ -30,6 +30,7 @@ public class Bird {
         y       = 0.0f;
         velY    = 0.0f;
         vivo    = true;
+        GRAVEDAD = -1.9f;
         puntaje = 0;
         tiempoAla = 0.0f;
     }
@@ -55,6 +56,10 @@ public class Bird {
 
         float top = y + ALTO * 0.5f;
         float bottom = y - ALTO * 0.5f;
+        
+        if (puntaje >= 3) {
+           this.GRAVEDAD = 1.0f; 
+        }
 
         if (top >= 1.0f || bottom <= -1.0f) {
             vivo = false;

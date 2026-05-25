@@ -46,6 +46,8 @@ public class AppFlappyBird {
     private Bird bird1;
     private Bird bird2;
 
+    private Bird bird3;
+
     // Recursos OpenGL basicos.
     private long window;
     private int programa;
@@ -62,6 +64,8 @@ public class AppFlappyBird {
     private boolean prevSpace;
     private boolean prevW;
     private boolean prevR;
+
+    private boolean prevB;
 
     // Dificultad progresiva        
     private float velocidadActual;  
@@ -131,6 +135,10 @@ public class AppFlappyBird {
         dibujo = new DibujoHelper(programa, uOffsetLocation, uScaleLocation, uColorLocation);
         bird1 = new Bird(-0.45f);
         bird2 = new Bird(-0.30f);
+        
+        
+        bird3 = new Bird(-0.15f);
+
 
         nubes.add(new Nube(-0.70f,  0.72f, 1.20f));
         nubes.add(new Nube( 0.20f,  0.62f, 0.85f));
@@ -146,6 +154,7 @@ public class AppFlappyBird {
     private void resetGame() {
         bird1.reset();
         bird2.reset();
+        bird3.reset();
         timerSpawn = 0.0f;
         started = false;
         gameOver = false;
@@ -213,6 +222,21 @@ public class AppFlappyBird {
         }
         prevW = wAhora;
 
+        // jugador 3
+        boolean bAhora = GLFW.glfwGetKey(window, GLFW.GLFW_KEY_B) == GLFW.GLFW_PRESS;
+        if (bAhora && !prevB) {
+
+            if (gameOver) {
+                resetGame();
+            } 
+
+            if (bird3.vivo) {
+                started = true;
+                bird3.saltar();
+            }
+        }
+        prevB = bAhora;
+
         boolean rAhora = GLFW.glfwGetKey(window, GLFW.GLFW_KEY_R) == GLFW.GLFW_PRESS;
         if (rAhora && !prevR && gameOver) {
             resetGame();
@@ -241,8 +265,10 @@ public class AppFlappyBird {
         if (bird1.vivo) bird1.actualizar(dt);
         if (bird2.vivo) bird2.actualizar(dt);
 
+        if (bird3.vivo) bird3.actualizar(dt);
 
-        if (!bird1.vivo && !bird2.vivo) {
+
+        if (!bird1.vivo && !bird2.vivo && !bird3.vivo) {
             gameOver = true;
             actualizarTitulo();
             return;
@@ -272,10 +298,17 @@ public class AppFlappyBird {
                 t.puntuadaP2 = true;
                 bird2.puntaje++;
             }
+            
+            if (!t.puntuadaP3 && bird3.vivo && bordeDerechoPipe < bird3.X) {
+                t.puntuadaP3 = true;
+                bird3.puntaje++;
+            }
 
             // Colisión: si choca, ese pájaro muere (el otro sigue)
             if (bird1.vivo && colisionaConTuberia(bird1, t)) bird1.vivo = false;
             if (bird2.vivo && colisionaConTuberia(bird2, t)) bird2.vivo = false;
+            if (bird3.vivo && colisionaConTuberia(bird3, t)) bird3.vivo = false;
+
 
             // Eliminar tuberías que salieron de pantalla
             if (bordeDerechoPipe < -1.3f) {
@@ -296,7 +329,7 @@ public class AppFlappyBird {
 
 
     private void actualizarDificultad() {
-        int puntajeTotal = bird1.puntaje + bird2.puntaje;
+        int puntajeTotal = bird1.puntaje + bird2.puntaje + bird3.puntaje;
 
         // Sube un nivel por cada 5 puntos combinados entre los dos jugadores
         int nivel = (puntajeTotal / 5) + 1;
@@ -405,6 +438,9 @@ public class AppFlappyBird {
         if (bird2.vivo) bird2.dibujar(dibujo, 0.25f, 0.60f, 0.95f);
 
 
+        if (bird3.vivo) bird3.dibujar(dibujo, 0.0f, 1.0f, 0.0f);
+
+
         // Overlay simple de game over (sin texto en framebuffer).
         if (gameOver) {
             dibujo.rect(0.0f, 0.0f, 2.0f, 0.22f, 0.15f, 0.18f, 0.22f);
@@ -444,7 +480,7 @@ public class AppFlappyBird {
             titulo = "FLAPPY BIRD  |  SPACE, W, ENTER o R para comenzar";
         } else {
             titulo = "Nivel " + nivelActual + "  |  P1(SPACE): " + bird1.puntaje
-                            + "  |  P2(W): "   + bird2.puntaje;
+                            + "  |  P2(W): "   + bird2.puntaje + "  |  P3(W): "   + bird3.puntaje;
             if (!started) {
                 titulo += "  |  SPACE o W para empezar";
             } else if (gameOver) {

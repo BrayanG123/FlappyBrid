@@ -13,12 +13,15 @@ class Tuberia {
     float gapCentroY;
     boolean puntuadaP1;
     boolean puntuadaP2;
+        
+    boolean puntuadaP3;
 
     Tuberia(float x, float gapCentroY) {
         this.x = x;
         this.gapCentroY = gapCentroY;
         this.puntuadaP1 = false;
         this.puntuadaP2 = false;
+        this.puntuadaP3 = false;
     }
 }
 
